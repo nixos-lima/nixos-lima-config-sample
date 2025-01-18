@@ -11,6 +11,9 @@
 
     # TODO: Consider setting some/all of the mandatory settings in `limainit.nixosModules.lima`
 
+    # Enable lima-init, lima-guestagent, other config needed for Lima support (via `limainit.nixosModules.lima`)
+    services.lima.enable = true;
+
     # Using Flakes is highly-recommended, maybe even required.
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
