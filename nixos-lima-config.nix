@@ -9,7 +9,7 @@
       limainit.nixosModules.lima
     ];
 
-    hostName = "sample";
+    networking.hostName = "sample";
 
     # TODO: Consider setting some/all of the mandatory settings in `limainit.nixosModules.lima`
 
