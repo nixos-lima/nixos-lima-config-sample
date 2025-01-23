@@ -9,6 +9,8 @@
       limainit.nixosModules.lima
     ];
 
+    hostName = "sample";
+
     # TODO: Consider setting some/all of the mandatory settings in `limainit.nixosModules.lima`
 
     # Enable lima-init, lima-guestagent, other config needed for Lima support (via `limainit.nixosModules.lima`)
