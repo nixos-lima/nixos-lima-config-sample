@@ -12,12 +12,12 @@
 
   outputs = { self, nixpkgs, limainit, home-manager, ... }@inputs:
     let
-      system = "aarch64-darwin";
+      # Change this to "x86_64-linux" if necessary
+      system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
         nixosConfigurations.sample = nixpkgs.lib.nixosSystem {
-          # Change this to "x86_64-linux" if necessary
-          system = "aarch64-linux";
+          inherit system;
           # Pass the `limainit` input along with the default module system parameters
           specialArgs = { inherit limainit; };
           modules = [
