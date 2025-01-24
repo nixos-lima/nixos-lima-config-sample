@@ -16,8 +16,8 @@
         ./nixos-lima-config.nix
       ];
     };
-    // You'll need to change the configuration name to match the username
-    // that Lima automatically creates (same as your host username)
+    # You'll need to change the configuration name to match the username
+    # that Lima automatically creates (same as your host username)
     homeConfigurations."sean" = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
