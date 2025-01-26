@@ -2,7 +2,7 @@
 
 {
   home.packages = [
-    pkgs.jq
+    pkgs.hello
   ];
   # Git config will typically be placed in ~/.config/git/config
   programs.git = {
