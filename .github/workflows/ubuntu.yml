@@ -1,0 +1,63 @@
+name: NixOS Lima on Ubuntu
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  nixos-sample:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+#        ubuntu-24.04-arm doesn't work, see https://github.com/lima-vm/lima/issues/3156
+#        os: [ubuntu-24.04, ubuntu-24.04-arm]
+      fail-fast: false
+    name: NixOS Lima on ${{ matrix.os }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: "Install QEMU"
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ovmf qemu-system-x86 qemu-system-aarch64 qemu-efi-aarch64 qemu-utils
+          sudo modprobe kvm
+          # `sudo usermod -aG kvm $(whoami)` does not take an effect on GHA
+          if [ "${{ matrix.os }}" == "ubuntu-24.04" ]; then
+            sudo chown $(whoami) /dev/kvm
+          fi
+
+      - name: "Install Lima"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}  # required by `gh attestation verify`
+          LIMA_ARCH: ${{ matrix.os == 'ubuntu-24.04' && 'x86_64' || (matrix.os == 'ubuntu-24.04-arm' && 'aarch64') || 'unknown' }}
+        run: |
+          set -eux
+          LIMA_VERSION=$(curl -fsSL https://api.github.com/repos/lima-vm/lima/releases/latest | jq -r .tag_name)
+          FILE="lima-${LIMA_VERSION:1}-Linux-${LIMA_ARCH}.tar.gz"
+          curl -fOSL https://github.com/lima-vm/lima/releases/download/${LIMA_VERSION}/${FILE}
+          gh attestation verify --owner=lima-vm "${FILE}"
+          sudo tar Cxzvf /usr/local "${FILE}"
+          rm -f "${FILE}"
+
+      - name: "Cache ~/.cache/lima"
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/lima
+          key: lima-${{ env.LIMA_VERSION }}
+
+      - name: "Start an instance of NixOS and rebuild Home Manager and NixOS"
+        run: |
+          set -eux
+          limactl start --name=nixsample --cpus=1 --memory=1 --network=lima:user-v2 nixos.yaml
+          ./setup-nixos.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifacts-lima-errlog
+          path: ~/.lima/nixsample/*.log
+

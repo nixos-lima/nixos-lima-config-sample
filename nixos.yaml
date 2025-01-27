@@ -1,0 +1,44 @@
+arch: "aarch64"
+
+images:
+  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-unstable-aarch64.qcow2"
+    arch: "aarch64"
+    digest: "sha512:ee079ef714dfcbcd939cf7f3f05060a88c6d6b138ccfa900eee9018ee6b494878910107911bbc6a21cb5e37ecc67f1fd044672c0688fd2adcfe3e87c3495245e"
+
+cpus: 2
+
+mounts:
+- location: "~"
+  writable: false
+  9p:
+    # Try choosing "mmap" or "none" if you see a stability issue with the default "fscache".
+    cache: "mmap"
+- location: "/tmp/lima"
+  writable: true
+  9p:
+    cache: "mmap"
+
+mountType: "9p"
+
+ssh:
+  # This allows access to GitHub, etc.
+  forwardAgent: true
+
+containerd:
+  system: false
+  user: false
+
+provision:
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+
+- mode: user
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+
+# Override default of same user name as host account
+user:
+    name: lima
