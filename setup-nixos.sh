@@ -31,7 +31,8 @@ limactl shell $LIMA_NAME -- nix run home-manager/master -- init --switch
 limactl shell $LIMA_NAME -- sudo git init --separate-git-dir=$CONFIG_DIR/nixos-config --shared=group /etc/nixos
 limactl shell $LIMA_NAME -- sudo chown $LIMA_USER:wheel -R $CONFIG_DIR/nixos-config
 limactl shell $LIMA_NAME -- sudo bash -c "cd /etc/nixos ; git checkout master"
-limactl shell $LIMA_NAME -- sudo nixos-rebuild switch --flake .#sample
+# nixos-rebuild is timing out on GitHub Actions, disable temporarily
+#limactl shell $LIMA_NAME -- sudo nixos-rebuild switch --flake .#sample
 
 # Configure subuid/subgid support for running rootless Podman services
 limactl shell $LIMA_NAME -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
