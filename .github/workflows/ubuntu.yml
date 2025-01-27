@@ -13,6 +13,8 @@ jobs:
 #        ubuntu-24.04-arm doesn't work, see https://github.com/lima-vm/lima/issues/3156
 #        os: [ubuntu-24.04, ubuntu-24.04-arm]
       fail-fast: false
+    env:
+      LIMA_VERSION: "v1.0.4"
     name: NixOS Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
@@ -35,7 +37,6 @@ jobs:
           LIMA_ARCH: ${{ matrix.os == 'ubuntu-24.04' && 'x86_64' || (matrix.os == 'ubuntu-24.04-arm' && 'aarch64') || 'unknown' }}
         run: |
           set -eux
-          LIMA_VERSION=$(curl -fsSL https://api.github.com/repos/lima-vm/lima/releases/latest | jq -r .tag_name)
           FILE="lima-${LIMA_VERSION:1}-Linux-${LIMA_ARCH}.tar.gz"
           curl -fOSL https://github.com/lima-vm/lima/releases/download/${LIMA_VERSION}/${FILE}
           gh attestation verify --owner=lima-vm "${FILE}"
