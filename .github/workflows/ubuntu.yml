@@ -48,10 +48,14 @@ jobs:
           path: ~/.cache/lima
           key: lima-${{ env.LIMA_VERSION }}
 
-      - name: "Start an instance of NixOS and rebuild Home Manager and NixOS"
+      - name: "Start an instance of NixOS"
         run: |
           set -eux
           limactl start --name=nixsample --cpus=1 --memory=1 --network=lima:user-v2 nixos.yaml
+
+      - name: "Rebuild Home Manager and NixOS"
+        run: |
+          set -eux
           ./setup-nixos.sh
 
       - name: Upload artifacts
