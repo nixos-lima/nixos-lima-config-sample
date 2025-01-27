@@ -26,18 +26,18 @@
         };
         # You'll need to change the configuration name to match the username
         # that Lima automatically creates (same as your host username)
-        homeConfigurations."sean" = home-manager.lib.homeManagerConfiguration {
+        homeConfigurations."runner" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
 
           # Specify your home configuration modules here, for example,
           # the path to your home.nix.
           modules = [
             {
-               home.username = "sean";
-               home.homeDirectory = "/home/sean.linux";
+               home.username = "runner";
+               home.homeDirectory = "/home/runner.linux";
                home.stateVersion = "25.05";
-               programs.git.userEmail = "sean@msgilligan.com";
-               programs.git.userName  = "Sean Gilligan";
+               programs.git.userEmail = "runner@github.com";
+               programs.git.userName  = "GitHub Runner";
             }
             ./home.nix
           ];
