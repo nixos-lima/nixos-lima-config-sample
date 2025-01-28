@@ -1,14 +1,41 @@
 # nixos-lima-config-sample
 
-A sample NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module (currently at `github:nixos-lima/nixos-lima/master`) to enable running NixOS within a [Lima](https://lima-vm.io) managed VM on macOS.
+A sample NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module to enable running NixOS within a [Lima](https://lima-vm.io)-managed VM on macOS.
 
-This repository is meant to be used as a template for your custom NixOS Lima VM configuration. Because it references the `nixos-lima` module, you should be able to update to new and improved versions while maintaining the configuration of your VM separately/privately.
+This repository can be used as a template for your custom NixOS Lima VM configuration. Because it references the `nixos-lima` module, you should be able to update to new and improved versions while maintaining the configuration of your VM separately/privately.
+   
+ The sample BASH scripts `setup-home-manager.sh` and `setup-rebuild-nixos.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanism allow you to configure and manage a NixOS Lima VM and track changes in Git repository. Note that it is possible to use a single repository for both the Home Manager and the NixOS configuration.
+
+This example uses a pre-built base image loaded from S3, but you can verify the build or build your own custom base image using [nixos-lima](https://github.com/nixos-lima/nixos-lima).
+
+## Prerequisites
+
+* macOS 13.5+ or recent Linux with Lima installed
+
+NOTE: Nix is not needed to run a NixOS Lima VM (e.g. you can install Lima with Homebrew or another mechanism)
 
 ## Installation
 
-See the instructions in the [nixos-lima README](https://github.com/nixos-lima/nixos-lima?tab=readme-ov-file#generating-the-image) for creating a Lima NixOS VM. Follow the instructions there for "Generating the image" and "Running NixOS", but for the "Rebuilding NixOS inside the Lima instance" use the flake in this repository.
+Check out this repository to your Lima host. The following commands can be used with no customization of this repository. (The main username for the guest VM, "lima" is hardcoded in `flake.nix`.)
 
-You should even be able to clone this repository and version control your changes with Git.
+```
+limactl start --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.yaml
+./setup-home-manager.sh lima
+./setup-rebuild-nixos.sh lima
+```
+
+If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:                             
+
+```
+limactl start --name=nixsample --tty=false nixos.yaml
+./setup-home-manager.sh
+./setup-rebuild-nixos.sh
+```
+You can then log in to your NixOS guest VM using:
+
+```
+limactl shell nixsample
+```
 
 ## Help Wanted
 
