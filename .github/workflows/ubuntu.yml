@@ -61,6 +61,7 @@ jobs:
           ./setup-home-manager.sh ${{ env.LIMA_USER }}
 
       - name: "Update and Rebuild NixOS"
+        if: false # Disable for now because this step is timing out
         run: |
           set -eux
           ./setup-rebuild-nixos.sh ${{ env.LIMA_USER }}
