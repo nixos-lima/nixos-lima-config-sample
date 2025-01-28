@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    limainit.url = "github:msgilligan/nixos-lima/msgilligan-main";
+    limainit.url = "github:nixos-lima/nixos-lima/master";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
