@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
 #        ubuntu-24.04-arm doesn't work, see https://github.com/lima-vm/lima/issues/3156
 #        os: [ubuntu-24.04, ubuntu-24.04-arm]
       fail-fast: false
@@ -56,6 +56,8 @@ jobs:
           key: lima-${{ env.LIMA_VERSION }}
 
       - name: "Start an instance of NixOS"
+        env:
+          QEMU_SYSTEM_AARCH64: "qemu-system-aarch64 -machine virt"
         run: |
           set -eux
           limactl start --name=nixsample --cpus=1 --memory=1 --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
