@@ -45,11 +45,15 @@ jobs:
           set -eux
           limactl start --name=nixsample --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
+      - name: "List Lima Instances"
+        run: |
+          limactl list
+
       - name: "Initialize Home Manager"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LIMA_NAME: "nixsample"
-          LIMA_HOME: "/home/lima.linux"
+          GUEST_HOME: "/home/lima.linux"
           CONFIG_DIR: "/home/lima.linux/.config"
           HOME_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
         run: |
