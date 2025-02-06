@@ -1,0 +1,65 @@
+name: NixOS Lima on macOS
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  nixos-sample:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-14]
+      fail-fast: false
+    env:
+      HOST_ARCH: "aarch64"
+      LIMA_VERSION: "v1.0.2"   # Manually set and only used for cache key
+      LIMA_USER: "lima"
+    name: NixOS Lima on ${{ matrix.os }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Lima with Nix
+        run: nix profile install nixpkgs#lima
+
+      - name: "Cache ~/.cache/lima"
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/lima
+          key: lima-${{ env.LIMA_VERSION }}
+
+      - name: "Start an instance of NixOS"
+        env:
+          # Use env variable QEMU_SYSTEM_AARCH64 to override Lima's QEMU configuration on aarch64 host
+          QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
+        run: |
+          set -eux
+          limactl start --name=nixsample --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
+
+      - name: "Initialize Home Manager"
+        run: |
+          set -eux
+          ./setup-home-manager.sh ${{ env.LIMA_USER }}
+
+      - name: "Update and Rebuild NixOS"
+        if: false # Disable for now because this step is timing out
+        run: |
+          set -eux
+          ./setup-rebuild-nixos.sh ${{ env.LIMA_USER }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifacts-${{ matrix.os }}-lima-errlog
+          path: ~/.lima/nixsample/*.log
+
