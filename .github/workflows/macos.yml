@@ -43,7 +43,7 @@ jobs:
           QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
         run: |
           set -eux
-          limactl start --name=nixsample --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
+          limactl start --name=nixsample --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
       - name: "Initialize Home Manager"
         env:
