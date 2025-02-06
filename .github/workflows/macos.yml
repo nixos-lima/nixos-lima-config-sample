@@ -46,9 +46,23 @@ jobs:
           limactl start --name=nixsample --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
       - name: "Initialize Home Manager"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LIMA_NAME: "nixsample"
+          LIMA_HOME: "/home/lima.linux"
+          CONFIG_DIR: "/home/lima.linux/.config"
+          HOME_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
         run: |
           set -eux
-          ./setup-home-manager.sh ${{ env.LIMA_USER }}
+          limactl list
+          # Create ~/.config if it doesn't already exist
+          limactl shell nixsample -- mkdir -p $CONFIG_DIR
+          # Checkout HOME_CONFIG_REPO containing your Home Manager configuration flake
+          limactl shell nixsample -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
+          # Initialize Home Manager
+          limactl shell nixsample-- env GITHUB_TOKEN=$GITHUB_TOKEN nix run home-manager/master -- init --switch
+          # Configure subuid/subgid support for running rootless Podman services
+          limactl shell nixsample -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
 
       - name: "Update and Rebuild NixOS"
         if: false # Disable for now because this step is timing out
