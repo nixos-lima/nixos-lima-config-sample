@@ -64,7 +64,7 @@ jobs:
           # Checkout HOME_CONFIG_REPO containing your Home Manager configuration flake
           limactl shell nixsample -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
           # Initialize Home Manager
-          limactl shell nixsample-- env GITHUB_TOKEN=$GITHUB_TOKEN nix run home-manager/master -- init --switch
+          limactl shell nixsample -- env GITHUB_TOKEN=$GITHUB_TOKEN nix run home-manager/master -- init --switch
           # Configure subuid/subgid support for running rootless Podman services
           limactl shell nixsample -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
 
