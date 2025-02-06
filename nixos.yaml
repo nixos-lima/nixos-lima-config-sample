@@ -5,8 +5,6 @@ images:
     arch: "aarch64"
     digest: "sha512:ee079ef714dfcbcd939cf7f3f05060a88c6d6b138ccfa900eee9018ee6b494878910107911bbc6a21cb5e37ecc67f1fd044672c0688fd2adcfe3e87c3495245e"
 
-cpus: 2
-
 mounts:
 - location: "~"
   writable: false
