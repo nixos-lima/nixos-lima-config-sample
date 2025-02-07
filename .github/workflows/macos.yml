@@ -45,10 +45,6 @@ jobs:
           set -eux
           limactl start --name=nixsample --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
-      - name: "List Lima Instances"
-        run: |
-          limactl list
-
       - name: "Initialize Home Manager"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,13 +54,15 @@ jobs:
           HOME_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
         run: |
           set -eux
-          limactl list
           # Create ~/.config if it doesn't already exist
           limactl shell nixsample -- mkdir -p $CONFIG_DIR
           # Checkout HOME_CONFIG_REPO containing your Home Manager configuration flake
           limactl shell nixsample -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
+          # Temporarily (it will be overwritten on the next nixos-rebuild) add a GitHub access token to nix.conf so
+          # we can init Home Manager without getting rate limited by GitHub Actions
+          limactl shell nixsample -- sudo echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> /etc/nix/nix.conf
           # Initialize Home Manager
-          limactl shell nixsample -- env GITHUB_TOKEN=$GITHUB_TOKEN nix run home-manager/master -- init --switch
+          limactl shell nixsample -- nix run home-manager/master -- init --switch
           # Configure subuid/subgid support for running rootless Podman services
           limactl shell nixsample -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
 
