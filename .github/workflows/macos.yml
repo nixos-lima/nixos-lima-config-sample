@@ -46,6 +46,7 @@ jobs:
           limactl start --name=nixsample --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
       - name: "Initialize Home Manager"
+        if: false # Disable for now because this step is timing out
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LIMA_NAME: "nixsample"
@@ -67,10 +68,22 @@ jobs:
           limactl shell nixsample -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
 
       - name: "Update and Rebuild NixOS"
-        if: false # Disable for now because this step is timing out
+        env:
+          LIMA_NAME: "nixsample"
+          GUEST_HOME: "/home/lima.linux"
+          CONFIG_DIR: "/home/lima.linux/.config"
+          NIXOS_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
         run: |
           set -eux
-          ./setup-rebuild-nixos.sh ${{ env.LIMA_USER }}
+          # Create ~/.config if it doesn't already exist
+          limactl shell nixsample -- mkdir -p $CONFIG_DIR
+          # Checkout NIXOS_CONFIG_REPO containing your NixOS host configuration flake
+          limactl shell nixsample -- git clone --bare $NIXOS_CONFIG_REPO $CONFIG_DIR/nixos-config
+          # Setup NixOS system config in separate-git-dir owned by user, with working directory in /etc/nixos
+          limactl shell nixsample -- sudo git init --separate-git-dir=$CONFIG_DIR/nixos-config --shared=group /etc/nixos
+          limactl shell nixsample -- sudo chown $LIMA_USER:wheel -R $CONFIG_DIR/nixos-config
+          limactl shell nixsample -- sudo bash -c "cd /etc/nixos ; git checkout master"
+          limactl shell nixsample -- sudo bash -c "NIX_CONFIG='access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}' nixos-rebuild switch --flake .#sample"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
