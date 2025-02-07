@@ -21,9 +21,9 @@ limactl shell $LIMA_NAME -- mkdir -p $CONFIG_DIR
 # Checkout HOME_CONFIG_REPO containing your Home Manager configuration flake
 limactl shell $LIMA_NAME -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
 
+# Configure subuid/subgid support for running rootless Podman services
+#limactl shell $LIMA_NAME -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
+
 # Initialize Home Manager
 limactl shell $LIMA_NAME -- nix run home-manager/master -- init --switch
-
-# Configure subuid/subgid support for running rootless Podman services
-limactl shell $LIMA_NAME -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
 
