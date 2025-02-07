@@ -60,7 +60,7 @@ jobs:
           limactl shell nixsample -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
           # Temporarily (it will be overwritten on the next nixos-rebuild) add a GitHub access token to nix.conf so
           # we can init Home Manager without getting rate limited by GitHub Actions
-          limactl shell nixsample -- sudo echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> /etc/nix/nix.conf
+          limactl shell nixsample -- sudo sh -c "echo 'access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}' >> /etc/nix/nix2.conf"
           # Initialize Home Manager
           limactl shell nixsample -- nix run home-manager/master -- init --switch
           # Configure subuid/subgid support for running rootless Podman services
