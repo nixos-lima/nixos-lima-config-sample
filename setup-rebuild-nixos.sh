@@ -25,6 +25,7 @@ limactl shell $LIMA_NAME -- sudo git init --separate-git-dir=$CONFIG_DIR/nixos-c
 limactl shell $LIMA_NAME -- sudo chown $LIMA_USER:wheel -R $CONFIG_DIR/nixos-config
 limactl shell $LIMA_NAME -- sudo bash -c "cd /etc/nixos ; git checkout master"
 limactl shell $LIMA_NAME -- sudo nixos-rebuild boot --flake .#sample
+sleep 5
 limactl stop $LIMA_NAME
 limactl start $LIMA_NAME
 
