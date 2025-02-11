@@ -63,13 +63,13 @@ jobs:
       - name: "Update and Rebuild NixOS"
         run: |
           set -eux
-          ./setup-rebuild-nixos.sh ${{ env.LIMA_USER }}
+          ./setup-rebuild-nixos.sh nixsample ${{ env.LIMA_USER }} sample
 
       - name: "Initialize Home Manager"
         if: false # Disable for now to try to avoid timeouts
         run: |
           set -eux
-          ./setup-home-manager.sh ${{ env.LIMA_USER }}
+          ./setup-home-manager.sh nixsample ${{ env.LIMA_USER }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
