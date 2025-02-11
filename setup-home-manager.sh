@@ -49,7 +49,7 @@ limactl shell $GUEST_HOST_NAME -- mkdir -p $GUEST_CONFIG_DIR
 limactl shell $GUEST_HOST_NAME -- git clone $GUEST_CONFIG_REPO $GUEST_CONFIG_DIR/home-manager
 
 # Configure subuid/subgid support for running rootless Podman services
-#limactl shell $GUEST_HOST_NAME -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
+#limactl shell $GUEST_HOST_NAME -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $GUEST_USER
 
 # Initialize Home Manager
 limactl shell $GUEST_HOST_NAME -- nix run home-manager/master -- init --switch
