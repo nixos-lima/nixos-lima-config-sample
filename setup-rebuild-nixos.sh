@@ -59,5 +59,3 @@ limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake .#$GUEST_CONFI
 sleep 1
 limactl stop $GUEST_HOST_NAME
 limactl start $GUEST_HOST_NAME
-
-
