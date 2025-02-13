@@ -4,7 +4,7 @@ A sample NixOS configuration flake that uses the [nixos-lima](https://github.com
 
 This repository can be used as a template for your custom NixOS Lima VM configuration. Because it references the `nixos-lima` module, you should be able to update to new and improved versions while maintaining the configuration of your VM separately/privately.
    
- The sample BASH scripts `setup-home-manager.sh` and `setup-rebuild-nixos.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanism allow you to configure and manage a NixOS Lima VM and track changes in Git repository. Note that it is possible to use a single repository for both the Home Manager and the NixOS configuration.
+ The sample BASH scripts `setup-nixos.sh` and `setup-home-manager.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanism allow you to configure and manage a NixOS Lima VM and track changes in Git repository. Note that it is possible to use a single repository for both the Home Manager and the NixOS configuration.
 
 This example uses a pre-built base image loaded from S3, but you can verify the build or build your own custom base image using [nixos-lima](https://github.com/nixos-lima/nixos-lima).
 
@@ -21,7 +21,7 @@ Check out this repository to your Lima host. The following commands can be used 
 ```
 limactl start --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.yaml
 ./setup-home-manager.sh nixsample lima sample
-./setup-rebuild-nixos.sh nixsample lima
+./setup-nixos.sh nixsample lima
 ```
 
 If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:                             
@@ -29,7 +29,7 @@ If you create a fork or copy of this repo, or use your own Home Manager flake, y
 ```
 limactl start --name=nixsample --tty=false nixos.yaml
 ./setup-home-manager.sh nixsample $USER sample
-./setup-rebuild-nixos.sh nixsample
+./setup-nixos.sh nixsample
 ```
 You can then log in to your NixOS guest VM using:
 
