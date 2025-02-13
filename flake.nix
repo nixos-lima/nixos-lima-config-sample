@@ -16,14 +16,23 @@
       system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-        nixosConfigurations.sample = nixpkgs.lib.nixosSystem {
-          inherit system;
+        nixosConfigurations.nixsample-aarch64 = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
           # Pass the `limainit` input along with the default module system parameters
           specialArgs = { inherit limainit; };
           modules = [
             ./nixos-lima-config.nix
           ];
         };
+        nixosConfigurations.nixsample-x86_64 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          # Pass the `limainit` input along with the default module system parameters
+          specialArgs = { inherit limainit; };
+          modules = [
+            ./nixos-lima-config.nix
+          ];
+        };
+
         # You'll need to change the configuration name to match the username
         # that Lima automatically creates (same as your host username)
         homeConfigurations."lima" = home-manager.lib.homeManagerConfiguration {
