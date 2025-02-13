@@ -68,7 +68,6 @@ jobs:
           ./setup-rebuild-nixos.sh ${{ env.GUEST_HOST_NAME }} ${{ env.GUEST_USER }} ${{ env.GUEST_HOST_NAME }}-${{ matrix.guest-arch }}
 
       - name: "Initialize Home Manager"
-        if: false # Disable for now to try to avoid timeouts
         run: |
           set -eux
           ./setup-home-manager.sh ${{ env.GUEST_HOST_NAME }}  ${{ env.GUEST_USER }}
