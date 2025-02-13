@@ -3,7 +3,10 @@ arch: "aarch64"
 images:
   - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-unstable-aarch64.qcow2"
     arch: "aarch64"
-    digest: "sha512:ee079ef714dfcbcd939cf7f3f05060a88c6d6b138ccfa900eee9018ee6b494878910107911bbc6a21cb5e37ecc67f1fd044672c0688fd2adcfe3e87c3495245e"
+    digest: "sha512:51529441cec5b90c3772f81ec5cfc09c6ce4534ac76e7cb8415df754900cc2250947df59c327d9c7dbbcb95a3dc317f0c8c55fdd3c7c00740693c3cc437f7fce"
+  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-unstable-x86_64.qcow2"
+    arch: "x86_64"
+    digest: "sha512:5492489506bb14ace363f83d30425db48a01c379bb39a3787b914c9eac754e59326a5b424866f423c2d2e0358d0975bbf94a1cf3914e91654cc399daea1f0fe5"
 
 mounts:
 - location: "~"
