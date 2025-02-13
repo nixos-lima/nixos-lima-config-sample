@@ -13,13 +13,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
+        guest-arch: ['aarch64', 'x86_64']
       fail-fast: false
     env:
       # HOST_ARCH value must match string in Lima download filename
       HOST_ARCH: ${{ matrix.os == 'ubuntu-24.04' && 'x86_64' || (matrix.os == 'ubuntu-24.04-arm' && 'aarch64') || 'unknown' }}
       LIMA_VERSION: "v1.0.6"
       LIMA_USER: "lima"
-    name: NixOS Lima on ${{ matrix.os }}
+    name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -50,7 +51,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/lima
-          key: lima-${{ env.LIMA_VERSION }}
+          key: os-${{ matrix.os }}-NixOS-Lima-${{ env.LIMA_VERSION }}-guest-${{ matrix.guest-arch }}
 
       - name: "Start an instance of NixOS"
         env:
@@ -58,12 +59,12 @@ jobs:
           QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
         run: |
           set -eux
-          limactl start --name=nixsample --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
+          limactl start --arch ${{ matrix.guest-arch }} --name=nixsample --network=lima:user-v2 --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
 
       - name: "Update and Rebuild NixOS"
         run: |
           set -eux
-          ./setup-rebuild-nixos.sh nixsample ${{ env.LIMA_USER }} sample
+          ./setup-rebuild-nixos.sh nixsample ${{ env.LIMA_USER }} sample-${{ matrix.guest-arch }}
 
       - name: "Initialize Home Manager"
         if: false # Disable for now to try to avoid timeouts
@@ -75,6 +76,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: artifacts-${{ matrix.os }}-lima-errlog
+          name: artifacts-os-${{ matrix.os }}-guest-${{ matrix.guest-arch }}-lima-errlog
           path: ~/.lima/nixsample/*.log
 
