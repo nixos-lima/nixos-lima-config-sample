@@ -19,7 +19,7 @@ NOTE: Nix is not needed to run a NixOS Lima VM (e.g. you can install Lima with H
 Check out this repository to your Lima host. The following commands can be used with no customization of this repository. (The main username for the guest VM, "lima" is hardcoded in `flake.nix`.)
 
 ```
-limactl start --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.yaml
+limactl start --vm-type qemu --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.yaml
 ./setup-home-manager.sh nixsample lima sample
 ./setup-nixos.sh nixsample lima
 ```
@@ -27,7 +27,7 @@ limactl start --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.ya
 If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:                             
 
 ```
-limactl start --name=nixsample --tty=false nixos.yaml
+limactl start --vm-type qemu --name=nixsample --tty=false nixos.yaml
 ./setup-home-manager.sh nixsample $USER sample
 ./setup-nixos.sh nixsample
 ```
