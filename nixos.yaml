@@ -1,12 +1,12 @@
 arch: "aarch64"
 
 images:
-  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-unstable-aarch64.qcow2"
+  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-250721-aarch64.qcow2"
     arch: "aarch64"
-    digest: "sha512:51529441cec5b90c3772f81ec5cfc09c6ce4534ac76e7cb8415df754900cc2250947df59c327d9c7dbbcb95a3dc317f0c8c55fdd3c7c00740693c3cc437f7fce"
-  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-unstable-x86_64.qcow2"
+    digest: "sha512:336a960a7405cbdfc4657bc7877c5e4a3472935daeb22cc288e5a098ea2088db6c6462bc7a58f2d11e18c3ecfa342e3eb99ad6e414bb8903ac2da64255fdf26e"
+  - location: "https://s3.us-west-2.amazonaws.com/static.msgilligan.com/nixos-lima/nixos-lima-250721-x86_64.qcow2"
     arch: "x86_64"
-    digest: "sha512:5492489506bb14ace363f83d30425db48a01c379bb39a3787b914c9eac754e59326a5b424866f423c2d2e0358d0975bbf94a1cf3914e91654cc399daea1f0fe5"
+    digest: "sha512:25e9556084d46fc6f07ee209e9c56fea340022af6ea73a840aa4c9b7e1bf41c3c8a7761b5ec76bf2a356bbae19adc8f9fa9fe00ae42582d393ddefe7b6f32251"
 
 mounts:
 - location: "~"
