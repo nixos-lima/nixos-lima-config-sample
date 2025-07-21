@@ -37,22 +37,18 @@ jobs:
             sudo chown $(whoami) /dev/kvm
           fi
 
-      - name: "Install Lima"
-        env:
-          GITHUB_TOKEN: ${{ github.token }}  # required by `gh attestation verify`
-        run: |
-          set -eux
-          FILE="lima-${LIMA_VERSION:1}-Linux-${HOST_ARCH}.tar.gz"
-          curl -fOSL https://github.com/lima-vm/lima/releases/download/${LIMA_VERSION}/${FILE}
-          gh attestation verify --owner=lima-vm "${FILE}"
-          sudo tar Cxzvf /usr/local "${FILE}"
-          rm -f "${FILE}"
+      - name: "Set up Lima"
+        uses: lima-vm/lima-actions/setup@v1
+        id: lima-actions-setup
+        with:
+          version: ${{ env.LIMA_VERSION }}
+          additional_guestagents: ${{ matrix.os == 'ubuntu-24.04' && 'false' || (matrix.os == 'ubuntu-24.04-arm' && 'true') || 'false' }}
 
       - name: "Cache ~/.cache/lima"
         uses: actions/cache@v4
         with:
           path: ~/.cache/lima
-          key: os-${{ matrix.os }}-NixOS-Lima-${{ env.LIMA_VERSION }}-guest-${{ matrix.guest-arch }}
+          key: os-${{ matrix.os }}-NixOS-Lima-${{ steps.lima-actions-setup.outputs.version }}-guest-${{ matrix.guest-arch }}
 
       - name: "Start an instance of NixOS"
         env:
