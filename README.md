@@ -20,16 +20,16 @@ Check out this repository to your Lima host. The following commands can be used 
 
 ```
 limactl start --vm-type qemu --name=nixsample --tty=false  --set '.user.name = "lima"' nixos.yaml
-./setup-home-manager.sh nixsample lima
 ./setup-nixos.sh nixsample lima nixsample-aarch64
+./setup-home-manager.sh nixsample lima
 ```
 
 If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:                             
 
 ```
 limactl start --vm-type qemu --name=nixsample --tty=false nixos.yaml
-./setup-home-manager.sh nixsample $USER
 ./setup-nixos.sh nixsample $USER nixsample-aarch64
+./setup-home-manager.sh nixsample $USER
 ```
 You can then log in to your NixOS guest VM using:
 
