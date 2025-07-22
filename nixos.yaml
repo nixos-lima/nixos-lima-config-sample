@@ -26,14 +26,3 @@ ssh:
 containerd:
   system: false
   user: false
-
-provision:
-- mode: system
-  script: |
-    #!/bin/bash
-    set -eux -o pipefail
-
-- mode: user
-  script: |
-    #!/bin/bash
-    set -eux -o pipefail
