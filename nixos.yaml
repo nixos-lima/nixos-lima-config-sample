@@ -1,5 +1,3 @@
-arch: "aarch64"
-
 images:
   - location: "https://github.com/nixos-lima/nixos-lima/releases/download/v0.0.1/nixos-lima-v0.0.1-aarch64.qcow2"
     arch: "aarch64"
