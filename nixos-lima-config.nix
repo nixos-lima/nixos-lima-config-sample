@@ -20,11 +20,7 @@
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
     # ssh
-    # Some of these settings are needed for Lima to work correctly
-    # TODO: The ones that aren't required should be returned to more secure (default) settings
     services.openssh.enable = true;
-    services.openssh.settings.PermitRootLogin = "yes";
-    users.users.root.password = "nixos";
 
     security = {
         sudo.wheelNeedsPassword = false;
@@ -58,5 +54,5 @@
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
     # before changing this value.
-    system.stateVersion = "25.05";
+    system.stateVersion = "25.11";
 }
