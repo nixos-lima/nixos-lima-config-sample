@@ -57,5 +57,4 @@ limactl shell $GUEST_HOST_NAME -- sudo chown $GUEST_USER:wheel -R $GUEST_CONFIG_
 limactl shell $GUEST_HOST_NAME -- sudo bash -c "cd /etc/nixos ; git checkout master"
 limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake .#$GUEST_CONFIG_NAME
 sleep 1
-limactl stop $GUEST_HOST_NAME
-limactl start $GUEST_HOST_NAME
+limactl restart $GUEST_HOST_NAME
