@@ -9,7 +9,7 @@
       nixos-lima.nixosModules.lima
     ];
 
-    networking.hostName = "sample";
+    networking.hostName = "nixsample";
 
     # TODO: Consider setting some/all of the mandatory settings in `nixos-lima.nixosModules.lima`
 

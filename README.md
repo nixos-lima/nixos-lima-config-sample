@@ -16,7 +16,7 @@ NOTE: Nix is not needed to run a NixOS Lima VM (e.g. you can install Lima with H
 
 ## Installation
 
-Check out this repository to your Lima host. The following commands can be used with no customization of this repository. (The main username for the guest VM, "lima" is hardcoded in `flake.nix`.)
+Check out this repository to your Lima host. The following commands can be used with no customization of this repository. (The main username for the guest VM, "lima" is hardcoded in `homeConfigurations."lima"` in `flake.nix`.)
 
 ```
 limactl start --yes --set '.user.name = "lima"' nixos.yaml
