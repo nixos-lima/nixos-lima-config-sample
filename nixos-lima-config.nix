@@ -1,4 +1,4 @@
-{ config, modulesPath, pkgs, lib, limainit,... }:
+{ config, modulesPath, pkgs, lib, nixos-lima,... }:
 {
     #
     # This is a sample configuration module for a NixOS Lima VM
@@ -6,14 +6,14 @@
     imports = [
       (modulesPath + "/profiles/qemu-guest.nix")
       # The `lima` module sets up systemd services to support LimaVM
-      limainit.nixosModules.lima
+      nixos-lima.nixosModules.lima
     ];
 
     networking.hostName = "sample";
 
-    # TODO: Consider setting some/all of the mandatory settings in `limainit.nixosModules.lima`
+    # TODO: Consider setting some/all of the mandatory settings in `nixos-lima.nixosModules.lima`
 
-    # Enable lima-init, lima-guestagent, other config needed for Lima support (via `limainit.nixosModules.lima`)
+    # Enable lima-init, lima-guestagent, other config needed for Lima support (via `nixos-lima.nixosModules.lima`)
     services.lima.enable = true;
 
     # Using Flakes is highly-recommended, maybe even required.
