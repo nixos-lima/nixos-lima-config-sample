@@ -20,15 +20,15 @@ Check out this repository to your Lima host. The following commands can be used 
 
 ```
 limactl start --yes --set '.user.name = "lima"' nixos.yaml
-./setup-nixos.sh nixos lima nixsample-aarch64
+./setup-nixos.sh nixos nixsample-aarch64
 ./setup-home-manager.sh nixos lima
 ```
 
-If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:                             
+If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:
 
 ```
 limactl start --yes nixos.yaml
-./setup-nixos.sh nixos $USER nixsample-aarch64
+./setup-nixos.sh nixos nixsample-aarch64
 ./setup-home-manager.sh nixos $USER
 ```
 You can then log in to your NixOS guest VM using:
