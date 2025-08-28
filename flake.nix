@@ -3,14 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    limainit.url = "github:nixos-lima/nixos-lima/master";
+    nixos-lima.url = "github:nixos-lima/nixos-lima/master";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, limainit, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-lima, home-manager, ... }@inputs:
     let
       # Change this to "x86_64-linux" if necessary
       system = "aarch64-linux";
@@ -18,16 +18,16 @@
     in {
         nixosConfigurations.nixsample-aarch64 = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
-          # Pass the `limainit` input along with the default module system parameters
-          specialArgs = { inherit limainit; };
+          # Pass the `nixos-lima` input along with the default module system parameters
+          specialArgs = { inherit nixos-lima; };
           modules = [
             ./nixos-lima-config.nix
           ];
         };
         nixosConfigurations.nixsample-x86_64 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          # Pass the `limainit` input along with the default module system parameters
-          specialArgs = { inherit limainit; };
+          # Pass the `nixos-lima` input along with the default module system parameters
+          specialArgs = { inherit nixos-lima; };
           modules = [
             ./nixos-lima-config.nix
           ];
