@@ -39,7 +39,6 @@ echo Configuring \"$GUEST_HOST_NAME\" using \""$GUEST_CONFIG_REPO#$GUEST_CONFIG_
 echo
 set -x
 
-
 # Checkout $GUEST_CONFIG_REPO containing your NixOS host configuration flake
 limactl shell $GUEST_HOST_NAME -- sudo git clone $GUEST_CONFIG_REPO /etc/nixos
 limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake /etc/nixos#$GUEST_CONFIG_NAME
