@@ -42,8 +42,7 @@ set -x
 
 # Checkout $GUEST_CONFIG_REPO containing your NixOS host configuration flake
 limactl shell $GUEST_HOST_NAME -- sudo git clone $GUEST_CONFIG_REPO /etc/nixos
-limactl shell $GUEST_HOST_NAME -- sudo bash -c "cd /etc/nixos ; git checkout master"
-limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake .#$GUEST_CONFIG_NAME
+limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake /etc/nixos#$GUEST_CONFIG_NAME
 sleep 0.1
 limactl stop $GUEST_HOST_NAME
 limactl start $GUEST_HOST_NAME
