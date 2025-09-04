@@ -65,7 +65,6 @@ jobs:
           ./setup-nixos.sh ${{ env.LIMA_GUEST_NAME }} ${{ env.NIX_CONFIG_BASE }}-${{ matrix.guest-arch }}
 
       - name: "Initialize Home Manager"
-        if: false # Disable for now to try to avoid timeouts
         run: |
           set -eux
           ./setup-home-manager.sh ${{ env.LIMA_GUEST_NAME }}  ${{ env.GUEST_USER }}
