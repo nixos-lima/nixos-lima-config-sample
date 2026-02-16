@@ -18,7 +18,7 @@ jobs:
     env:
       # HOST_ARCH value must match string in Lima download filename
       HOST_ARCH: ${{ matrix.os == 'ubuntu-24.04' && 'x86_64' || (matrix.os == 'ubuntu-24.04-arm' && 'aarch64') || 'unknown' }}
-      LIMA_VERSION: "v1.1.0-rc.0"
+      LIMA_VERSION: "v1.1.0-rc.1"
       LIMA_GUEST_NAME: "nixsample"
       NIX_CONFIG_BASE: "nixsample"
       GUEST_USER: "lima"
