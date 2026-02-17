@@ -57,7 +57,7 @@ jobs:
           QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
         run: |
           set -eux
-          LIMA_USERNET_RESOLVE_IP_ADDRESS_TIMEOUT=5 limactl start --arch ${{ matrix.guest-arch }} --name=${{ env.LIMA_GUEST_NAME }} --network=lima:user-v2 --set '.user.name = "${{ env.GUEST_USER }}"' nixos.yaml
+          LIMA_USERNET_RESOLVE_IP_ADDRESS_TIMEOUT=5 limactl start --memory=1.5 --arch ${{ matrix.guest-arch }} --name=${{ env.LIMA_GUEST_NAME }} --network=lima:user-v2 --set '.user.name = "${{ env.GUEST_USER }}"' nixos.yaml
 
       - name: "Update and Rebuild NixOS"
         run: |
