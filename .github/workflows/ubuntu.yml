@@ -22,6 +22,8 @@ jobs:
       LIMA_GUEST_NAME: "nixsample"
       NIX_CONFIG_BASE: "nixsample"
       GUEST_USER: "lima"
+      # env variable QEMU_SYSTEM_AARCH64 is used to override Lima's QEMU configuration
+      QEMU_SYSTEM_AARCH64: ${{ matrix.os == 'ubuntu-24.04-arm' && 'qemu-system-aarch64 -machine virt -cpu cortex-a76' || 'qemu-system-aarch64 -cpu cortex-a76' }}
     name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
@@ -53,13 +55,14 @@ jobs:
 
       - name: "Start an instance of NixOS"
         env:
-          # Use env variable QEMU_SYSTEM_AARCH64 to override Lima's QEMU configuration on aarch64 host
-          QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
+          QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
         run: |
           set -eux
           LIMA_USERNET_RESOLVE_IP_ADDRESS_TIMEOUT=5 limactl start --arch ${{ matrix.guest-arch }} --name=${{ env.LIMA_GUEST_NAME }} --network=lima:user-v2 --set '.user.name = "${{ env.GUEST_USER }}"' nixos.yaml
 
       - name: "Update and Rebuild NixOS"
+        env:
+          QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
         run: |
           set -eux
           ./setup-nixos.sh ${{ env.LIMA_GUEST_NAME }} ${{ env.NIX_CONFIG_BASE }}-${{ matrix.guest-arch }}
