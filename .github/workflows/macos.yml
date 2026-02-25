@@ -1,0 +1,94 @@
+name: NixOS Lima on macOS
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  nixos-sample:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-14]
+      fail-fast: false
+    env:
+      HOST_ARCH: "aarch64"
+      LIMA_VERSION: "v1.0.2"   # Manually set and only used for cache key
+      LIMA_USER: "lima"
+    name: NixOS Lima on ${{ matrix.os }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Lima with Nix
+        run: nix profile install nixpkgs#lima
+
+      - name: "Cache ~/.cache/lima"
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/lima
+          key: lima-${{ env.LIMA_VERSION }}
+
+      - name: "Start an instance of NixOS"
+        env:
+          # Use env variable QEMU_SYSTEM_AARCH64 to override Lima's QEMU configuration on aarch64 host
+          QEMU_SYSTEM_AARCH64: ${{ env.HOST_ARCH == 'aarch64' && 'qemu-system-aarch64 -machine virt -cpu max' || 'qemu-system-aarch64' }}
+        run: |
+          set -eux
+          limactl start --name=nixsample --set '.user.name = "${{ env.LIMA_USER }}"' nixos.yaml
+
+
+      - name: "Update and Rebuild NixOS"
+        env:
+          LIMA_NAME: "nixsample"
+          GUEST_HOME: "/home/lima.linux"
+          CONFIG_DIR: "/home/lima.linux/.config"
+          NIXOS_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
+        run: |
+          set -eux
+          # Create ~/.config if it doesn't already exist
+          limactl shell nixsample -- mkdir -p $CONFIG_DIR
+          # Checkout NIXOS_CONFIG_REPO containing your NixOS host configuration flake
+          limactl shell nixsample -- git clone --bare $NIXOS_CONFIG_REPO $CONFIG_DIR/nixos-config
+          # Setup NixOS system config in separate-git-dir owned by user, with working directory in /etc/nixos
+          limactl shell nixsample -- sudo git init --separate-git-dir=$CONFIG_DIR/nixos-config --shared=group /etc/nixos
+          limactl shell nixsample -- sudo chown $LIMA_USER:wheel -R $CONFIG_DIR/nixos-config
+          limactl shell nixsample -- sudo bash -c "cd /etc/nixos ; git checkout master"
+          limactl shell nixsample -- sudo bash -c "NIX_CONFIG='access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}' nixos-rebuild boot --flake .#sample"
+          sleep 5
+          limactl stop nixsample
+          limactl start nixsample
+
+      - name: "Initialize Home Manager"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LIMA_NAME: "nixsample"
+          GUEST_HOME: "/home/lima.linux"
+          CONFIG_DIR: "/home/lima.linux/.config"
+          HOME_CONFIG_REPO: "https://github.com/nixos-lima/nixos-lima-config-sample.git"
+        run: |
+          set -eux
+          # Create ~/.config if it doesn't already exist
+          limactl shell nixsample -- mkdir -p $CONFIG_DIR
+          # Checkout HOME_CONFIG_REPO containing your Home Manager configuration flake
+          limactl shell nixsample -- git clone $HOME_CONFIG_REPO $CONFIG_DIR/home-manager
+          # Initialize Home Manager
+          limactl shell nixsample -- bash -c "NIX_CONFIG='access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}' nix run home-manager/master -- init --switch"
+          # Configure subuid/subgid support for running rootless Podman services
+          #limactl shell nixsample -- sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $LIMA_USER
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifacts-${{ matrix.os }}-lima-errlog
+          path: ~/.lima/nixsample/*.log
+
