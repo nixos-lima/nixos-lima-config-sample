@@ -27,7 +27,7 @@ jobs:
     name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Install QEMU"
         run: |
@@ -48,7 +48,7 @@ jobs:
           additional_guestagents: ${{ matrix.os == 'ubuntu-24.04' && matrix.guest-arch == 'aarch64' && 'true' || (matrix.os == 'ubuntu-24.04-arm' && 'true') || 'false' }}
 
       - name: "Cache ~/.cache/lima"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/lima
           key: os-${{ matrix.os }}-NixOS-Lima-${{ steps.lima-actions-setup.outputs.version }}-guest-${{ matrix.guest-arch }}
@@ -74,7 +74,7 @@ jobs:
           ./setup-home-manager.sh ${{ env.LIMA_GUEST_NAME }}  ${{ env.GUEST_USER }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: artifacts-os-${{ matrix.os }}-guest-${{ matrix.guest-arch }}-lima-errlog
