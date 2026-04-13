@@ -21,17 +21,15 @@
     in {
         nixosConfigurations.nixsample-aarch64 = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
-          # Pass the `nixos-lima` input along with the default module system parameters
-          specialArgs = { inherit nixos-lima; };
           modules = [
+            nixos-lima.nixosModules.lima
             ./nixos-lima-config.nix
           ];
         };
         nixosConfigurations.nixsample-x86_64 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          # Pass the `nixos-lima` input along with the default module system parameters
-          specialArgs = { inherit nixos-lima; };
           modules = [
+            nixos-lima.nixosModules.lima
             ./nixos-lima-config.nix
           ];
         };
@@ -57,5 +55,5 @@
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
         };
-    };    
+    };
 }
