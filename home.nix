@@ -4,20 +4,25 @@
   home.packages = [
     pkgs.hello
   ];
+
   # Git config will typically be placed in ~/.config/git/config
   programs.git = {
     enable = true;
     package = pkgs.gitMinimal;  # Minimal Git without Perl or Python
-    aliases = {
-      ci = "commit";
-      co = "checkout";
-      st = "status";
-    };
-    extraConfig = {
-      safe = {
-        directory = [ "/etc/nixos" ];
+    settings = {
+      alias = {
+        ci = "commit";
+        co = "checkout";
+        st = "status";
       };
+      safe.directory = [ "/etc/nixos" ];
     };
+  };
+
+  # Auto-load per-project Nix dev shells via `.envrc` containing `use flake`.
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   # Let Home Manager install and manage itself.

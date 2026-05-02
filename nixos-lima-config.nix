@@ -20,6 +20,9 @@
     # ssh
     services.openssh.enable = true;
 
+    # VS Code Remote-SSH server support (patches the bundled Node.js to work on NixOS)
+    services.vscode-server.enable = true;
+
     security = {
         sudo.wheelNeedsPassword = false;
     };

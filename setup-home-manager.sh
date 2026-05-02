@@ -30,11 +30,11 @@ GUEST_HOST_NAME=${1}
 
 # Name of main user in Guest OS, defaults to logged-in USER
 GUEST_USER=${2:-$USER}
-GUEST_HOME=/home/${GUEST_USER}.linux
+GUEST_HOME=/home/${GUEST_USER}.guest
 GUEST_CONFIG_DIR=${GUEST_HOME}/.config
 
 # Home Manager configuration to use, if not provided use default
-GUEST_CONFIG_REPO=${4:-$DEFAULT_CONFIG_REPO}
+GUEST_CONFIG_REPO=${3:-$DEFAULT_CONFIG_REPO}
 
 set +x
 echo
