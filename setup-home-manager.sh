@@ -34,7 +34,7 @@ GUEST_HOME=/home/${GUEST_USER}.linux
 GUEST_CONFIG_DIR=${GUEST_HOME}/.config
 
 # Home Manager configuration to use, if not provided use default
-GUEST_CONFIG_REPO=${4:-$DEFAULT_CONFIG_REPO}
+GUEST_CONFIG_REPO=${3:-$DEFAULT_CONFIG_REPO}
 
 set +x
 echo
