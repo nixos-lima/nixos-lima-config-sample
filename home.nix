@@ -8,15 +8,13 @@
   programs.git = {
     enable = true;
     package = pkgs.gitMinimal;  # Minimal Git without Perl or Python
-    aliases = {
-      ci = "commit";
-      co = "checkout";
-      st = "status";
-    };
-    extraConfig = {
-      safe = {
-        directory = [ "/etc/nixos" ];
+    settings = {
+      alias = {
+        ci = "commit";
+        co = "checkout";
+        st = "status";
       };
+      safe.directory = [ "/etc/nixos" ];
     };
   };
 
