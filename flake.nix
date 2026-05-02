@@ -46,8 +46,8 @@
                home.username = "lima";
                home.homeDirectory = "/home/lima.guest";
                home.stateVersion = "25.11";
-               programs.git.userEmail = "lima@nowaythisdomainexistsreally.com";
-               programs.git.userName  = "Lima User";
+               programs.git.settings.user.email = "lima@nowaythisdomainexistsreally.com";
+               programs.git.settings.user.name  = "Lima User";
             }
             ./home.nix
           ];
