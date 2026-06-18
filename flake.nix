@@ -44,7 +44,7 @@
           modules = [
             {
                home.username = "lima";
-               home.homeDirectory = "/home/lima.linux";
+               home.homeDirectory = "/home/lima.guest";
                home.stateVersion = "26.05";
                programs.git.userEmail = "lima@nowaythisdomainexistsreally.com";
                programs.git.userName  = "Lima User";
