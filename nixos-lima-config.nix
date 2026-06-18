@@ -57,5 +57,5 @@
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
     # before changing this value.
-    system.stateVersion = "25.11";
+    system.stateVersion = "26.05";
 }

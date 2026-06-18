@@ -2,7 +2,7 @@
   description = "A sample NixOS-on-Lima configuration flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixos-lima = {
       url = "github:nixos-lima/nixos-lima/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,7 +45,7 @@
             {
                home.username = "lima";
                home.homeDirectory = "/home/lima.linux";
-               home.stateVersion = "25.11";
+               home.stateVersion = "26.05";
                programs.git.userEmail = "lima@nowaythisdomainexistsreally.com";
                programs.git.userName  = "Lima User";
             }
