@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   home.packages = [
     pkgs.hello
@@ -8,16 +7,6 @@
   programs.git = {
     enable = true;
     package = pkgs.gitMinimal;  # Minimal Git without Perl or Python
-    aliases = {
-      ci = "commit";
-      co = "checkout";
-      st = "status";
-    };
-    extraConfig = {
-      safe = {
-        directory = [ "/etc/nixos" ];
-      };
-    };
   };
 
   # Let Home Manager install and manage itself.
