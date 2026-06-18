@@ -11,6 +11,11 @@
 
     # TODO: Consider setting some/all of the mandatory settings in `nixos-lima.nixosModules.lima`
 
+    # lima-init imperatively adds a user at startup. `users.mutableUsers` should be `true`
+    # to prevent `nixos-rebuild` from overwriting that user which can cause login to fail.
+    # The default is `true`, but we'll set it explicitly to be clear.
+    users.mutableUsers = true;
+
     # Enable lima-init, lima-guestagent, other config needed for Lima support (via `nixos-lima.nixosModules.lima`)
     services.lima.enable = true;
 
