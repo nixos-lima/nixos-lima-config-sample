@@ -29,17 +29,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v6
 
-      - name: "Install QEMU"
-        run: |
-          set -eux
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ovmf qemu-system-x86 qemu-system-aarch64 qemu-efi-aarch64 qemu-utils
-          sudo modprobe kvm
-          # `sudo usermod -aG kvm $(whoami)` does not take an effect on GHA
-          if [ "${{ matrix.os }}" == "ubuntu-24.04" ]; then
-            sudo chown $(whoami) /dev/kvm
-          fi
-
       - name: "Set up Lima"
         uses: lima-vm/lima-actions/setup@v1
         id: lima-actions-setup
