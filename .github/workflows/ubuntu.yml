@@ -12,18 +12,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-26.04]
         guest-arch: ['aarch64', 'x86_64']
       fail-fast: false
     env:
       # HOST_ARCH value must match string in Lima download filename
-      HOST_ARCH: ${{ matrix.os == 'ubuntu-24.04' && 'x86_64' || (matrix.os == 'ubuntu-24.04-arm' && 'aarch64') || 'unknown' }}
+      HOST_ARCH: ${{ matrix.os == 'ubuntu-26.04' && 'x86_64' || (matrix.os == 'ubuntu-26.04-arm' && 'aarch64') || 'unknown' }}
       LIMA_VERSION: "v2.1.2"
       LIMA_GUEST_NAME: "nixsample"
       NIX_CONFIG_BASE: "nixsample"
       GUEST_USER: "lima"
       # env variable QEMU_SYSTEM_AARCH64 is used to override Lima's QEMU configuration
-      QEMU_SYSTEM_AARCH64: ${{ matrix.os == 'ubuntu-24.04-arm' && 'qemu-system-aarch64 -machine virt -cpu cortex-a76' || 'qemu-system-aarch64 -cpu cortex-a76' }}
+      QEMU_SYSTEM_AARCH64: ${{ matrix.os == 'ubuntu-26.04-arm' && 'qemu-system-aarch64 -machine virt -cpu cortex-a76' || 'qemu-system-aarch64 -cpu cortex-a76' }}
     name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
@@ -36,7 +36,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends ovmf qemu-system-x86 qemu-system-arm qemu-efi-aarch64 qemu-utils
           sudo modprobe kvm
           # `sudo usermod -aG kvm $(whoami)` does not take an effect on GHA
-          if [ "${{ matrix.os }}" == "ubuntu-24.04" ]; then
+          if [ "${{ matrix.os }}" == "ubuntu-26.04" ]; then
             sudo chown $(whoami) /dev/kvm
           fi
 
@@ -45,7 +45,7 @@ jobs:
         id: lima-actions-setup
         with:
           version: ${{ env.LIMA_VERSION }}
-          additional_guestagents: ${{ matrix.os == 'ubuntu-24.04' && matrix.guest-arch == 'aarch64' && 'true' || (matrix.os == 'ubuntu-24.04-arm' && 'true') || 'false' }}
+          additional_guestagents: ${{ matrix.os == 'ubuntu-26.04' && matrix.guest-arch == 'aarch64' && 'true' || (matrix.os == 'ubuntu-26.04-arm' && 'true') || 'false' }}
 
       - name: "Cache ~/.cache/lima"
         uses: actions/cache@v5
