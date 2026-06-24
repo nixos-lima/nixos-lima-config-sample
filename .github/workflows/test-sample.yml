@@ -81,3 +81,55 @@ jobs:
           name: artifacts-os-${{ matrix.os }}-guest-${{ matrix.guest-arch }}-lima-errlog
           path: ~/.lima/${{ env.LIMA_GUEST_NAME }}/*.log
 
+  macos-homebrew:
+    # Run the sample config on macOS, using Homebrew to install QEMU and Lima
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-15]
+        guest-arch: ['aarch64']
+      fail-fast: false
+    env:
+      HOST_ARCH: 'aarch64'
+      LIMA_GUEST_NAME: "nixsample"
+      NIX_CONFIG_BASE: "nixsample"
+      GUEST_USER: "lima"
+      LIMA_VM_TYPE: '--vm-type qemu'
+      # env variable QEMU_SYSTEM_AARCH64 is used to override Lima's QEMU configuration
+      QEMU_SYSTEM_AARCH64: 'qemu-system-aarch64 -machine virt -cpu max'
+    name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Install secp256k1 with Homebrew
+        if: runner.os == 'macOS'
+        run: |
+          brew install qemu lima
+
+      - name: "Start an instance of NixOS"
+        env:
+          QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
+        run: |
+          set -eux
+          LIMA_USERNET_RESOLVE_IP_ADDRESS_TIMEOUT=5 limactl start ${{ env.LIMA_VM_TYPE }} --arch ${{ matrix.guest-arch }} --name=${{ env.LIMA_GUEST_NAME }} --set '.user.name = "${{ env.GUEST_USER }}"' nixos.yaml
+
+      - name: "Update and Rebuild NixOS"
+        env:
+          QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
+        run: |
+          set -eux
+          ./setup-nixos.sh ${{ env.LIMA_GUEST_NAME }} ${{ env.NIX_CONFIG_BASE }}-${{ matrix.guest-arch }}
+
+      - name: "Initialize Home Manager"
+        if: false # Disable for now to try to avoid timeouts
+        run: |
+          set -eux
+          ./setup-home-manager.sh ${{ env.LIMA_GUEST_NAME }}  ${{ env.GUEST_USER }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: artifacts-os-${{ matrix.os }}-guest-${{ matrix.guest-arch }}-lima-errlog
+          path: ~/.lima/${{ env.LIMA_GUEST_NAME }}/*.log
