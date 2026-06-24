@@ -23,7 +23,7 @@ jobs:
       NIX_CONFIG_BASE: "nixsample"
       GUEST_USER: "lima"
       # env variable QEMU_SYSTEM_AARCH64 is used to override Lima's QEMU configuration
-      QEMU_SYSTEM_AARCH64: ${{ matrix.os == 'ubuntu-26.04-arm' && 'qemu-system-aarch64 -machine virt -cpu cortex-a76' || 'qemu-system-aarch64 -cpu cortex-a76' }}
+      QEMU_SYSTEM_AARCH64: ${{ matrix.os == 'ubuntu-26.04-arm' && 'qemu-system-aarch64 -machine virt' || 'qemu-system-aarch64' }}
     name: NixOS-${{ matrix.guest-arch }} Lima on ${{ matrix.os }}
     steps:
       - name: Check out code
