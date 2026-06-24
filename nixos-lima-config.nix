@@ -52,7 +52,7 @@
 
     # pkgs
     environment.systemPackages = with pkgs; [
-        vim
+      nextvi # small version of vi
     ];
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
