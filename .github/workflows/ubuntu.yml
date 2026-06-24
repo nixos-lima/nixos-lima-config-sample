@@ -9,11 +9,12 @@ on:
 
 jobs:
   nixos-sample:
+    # Run the sample config on Ubuntu, using `apt-get` to install QEMU and `lima-actions/setup` to install Lima
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-26.04]
-        guest-arch: ['aarch64', 'x86_64']
+        guest-arch: ['x86_64'] # 'aarch64' is disabled for now because Ubuntu QEMU seems unstable in TCG mode
       fail-fast: false
     env:
       # HOST_ARCH value must match string in Lima download filename
