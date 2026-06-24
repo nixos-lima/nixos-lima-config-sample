@@ -37,6 +37,8 @@ You can then log in to your NixOS guest VM using:
 limactl shell nixos
 ```
 
+NOTE:: By default, both `setup-nixos.sh` and `setup-home-manager.sh` use `git clone` to fetch their Nix flake configurations directly from the `master` branch of _this_ repository. Local changes to a checkout of the `*.nix` files will not be seen until you push them to your own remote Git repo *and* either change `DEFAULT_CONFIG_REPO` in the scripts or use the scripts `config-repo` parameter to override `DEFAULT_CONFIG_REPO`.
+
 ## Help Wanted
 
 Feedback, issues, and pull-requests are all most welcome.
