@@ -1,4 +1,4 @@
-name: NixOS Lima on Ubuntu
+name: Test NixOS-Lima Sample Config
 
 on:
   workflow_dispatch:
