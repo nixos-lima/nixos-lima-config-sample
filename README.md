@@ -1,10 +1,10 @@
 # nixos-lima-config-sample
 
-A sample NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module to enable running NixOS within a [Lima](https://lima-vm.io)-managed VM on macOS.
+A sample NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module to enable running NixOS within a [Lima](https://lima-vm.io)-managed VM on macOS and Linux.
 
 This repository can be used as a template for your custom NixOS Lima VM configuration. Because it references the `nixos-lima` module, you should be able to update to new and improved versions while maintaining the configuration of your VM separately/privately.
    
- The sample BASH scripts `setup-nixos.sh` and `setup-home-manager.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanisms allow you to configure and manage a NixOS Lima VM and track changes in a Git repository. Note that it is possible to use a single repository for both the Home Manager and the NixOS configuration.
+ The sample BASH scripts `setup-nixos.sh` and `setup-home-manager.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanisms allow you to configure and manage a NixOS Lima VM and track changes in a Git repository.
 
 This example uses the latest base image release from [nixos-lima](https://github.com/nixos-lima/nixos-lima).
 
@@ -12,7 +12,7 @@ This example uses the latest base image release from [nixos-lima](https://github
 
 * macOS 13.5+ or recent Linux with Lima installed
 
-NOTE: Nix is not needed to run a NixOS Lima VM (e.g. you can install Lima with Homebrew or another mechanism)
+NOTE: Nix is not needed to run a NixOS Lima VM (e.g. you can install Lima with Homebrew or another mechanism and start a guest VM running NixOS)
 
 ## Installation
 
@@ -24,7 +24,7 @@ limactl start --yes --set '.user.name = "lima"' nixos.yaml
 ./setup-home-manager.sh nixos lima
 ```
 
-If you create a fork or copy of this repo, or use your own Home Manager flake, you would likely use the same username as you use on the host system, so in that case the commands would be simpler:
+If you create a fork or copy of this repo, or use your own Home Manager flake, you can use the same username as you use on the host system, making the commands simpler:
 
 ```
 limactl start --yes nixos.yaml
