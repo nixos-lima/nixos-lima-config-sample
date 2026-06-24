@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  nixos-sample:
+  ubuntu-lima-action:
     # Run the sample config on Ubuntu, using `apt-get` to install QEMU and `lima-actions/setup` to install Lima
     runs-on: ${{ matrix.os }}
     strategy:
