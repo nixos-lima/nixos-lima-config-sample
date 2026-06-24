@@ -39,6 +39,26 @@ echo Configuring \"$GUEST_HOST_NAME\" using \""$GUEST_CONFIG_REPO#$GUEST_CONFIG_
 echo
 set -x
 
+set +x
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  # Copy GITHUB_TOKEN inside the VM to avoid GitHub API rate-limiting
+  set +x
+  printf 'access-tokens = github.com=%s\n' "$GITHUB_TOKEN" > nix.conf
+  set -x
+  chmod 600 nix.conf
+
+  GUEST_HOME=$(limactl shell $GUEST_HOST_NAME -- bash -c 'echo $HOME')
+
+  limactl shell $GUEST_HOST_NAME -- mkdir -p $GUEST_HOME/.config/nix
+  limactl shell $GUEST_HOST_NAME -- sudo mkdir -p /root/.config/nix
+  limactl copy nix.conf $GUEST_HOST_NAME:$GUEST_HOME/.config/nix/nix.conf
+  rm nix.conf
+  limactl shell $GUEST_HOST_NAME -- sudo cp $GUEST_HOME/.config/nix/nix.conf /root/.config/nix
+  limactl shell $GUEST_HOST_NAME -- sudo chmod 600 $GUEST_HOME/.config/nix/nix.conf
+  limactl shell $GUEST_HOST_NAME -- sudo chmod 600 /root/.config/nix/nix.conf
+fi
+set -x
+
 # Checkout $GUEST_CONFIG_REPO containing your NixOS host configuration flake
 limactl shell $GUEST_HOST_NAME -- sudo git clone $GUEST_CONFIG_REPO /etc/nixos
 limactl shell $GUEST_HOST_NAME -- sudo nixos-rebuild boot --flake /etc/nixos#$GUEST_CONFIG_NAME

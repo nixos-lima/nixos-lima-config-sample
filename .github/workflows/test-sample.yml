@@ -63,6 +63,7 @@ jobs:
 
       - name: "Update and Rebuild NixOS"
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
         run: |
           set -eux
@@ -116,6 +117,7 @@ jobs:
 
       - name: "Update and Rebuild NixOS"
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QEMU_SYSTEM_AARCH64: ${{ env.QEMU_SYSTEM_AARCH64 }}
         run: |
           set -eux
