@@ -86,7 +86,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-15]
+        os: [macos-15, macos-26]
         guest-arch: ['aarch64']
       fail-fast: false
     env:
