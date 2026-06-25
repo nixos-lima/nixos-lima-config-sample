@@ -103,7 +103,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v6
 
-      - name: Install secp256k1 with Homebrew
+      - name: Install QEMU and Lima with Homebrew
         if: runner.os == 'macOS'
         run: |
           brew install qemu lima
