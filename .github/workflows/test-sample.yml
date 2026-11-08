@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        lima-version: ["v2.1.4", "v2.2.1"]
+        lima-version: ["v2.1.4", "v2.2.1", "v2.3.0"]
         os: [ubuntu-26.04]
         guest-arch: ['x86_64'] # 'aarch64' is disabled for now because Ubuntu QEMU seems unstable in TCG mode
       fail-fast: false
